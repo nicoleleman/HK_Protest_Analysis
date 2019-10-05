@@ -11,7 +11,7 @@ csv_file = open('cms_scrape.csv', 'w')
 csv_writer = csv.writer((csv_file))
 csv_writer.writerow(['Headline','Summary','Video Link'])
 
-for article in soup.find_all('article'):
+for article in soup.find_all('article'):x
     headline = article.h2.a.text
     print(f'This is the headline: {headline}')
 
