@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
-import pandas as pd
-import numpy as np
-import csv
+#import pandas as pd
+#import numpy as np
+#import csv
 
 link = 'https://www.chinadailyhk.com/articles/163/39/218/1570991239568.html?newsId=109599'
 source  = requests.get(link).text
@@ -20,12 +20,13 @@ for article in soup.find_all('div', class_='news-cut-box'):
     print(f'Date: {date}')
 
     article_text = article.find('div', class_='news-cut')
-    #print(article_text)
+    print(article_text)
     article_paragraph = article_text.find_all('p')
     #print(article_paragraph)
     main_body = []
     for paragraph in article_paragraph:
         main_body.append(paragraph.text)
     print(main_body)
+
 
 
