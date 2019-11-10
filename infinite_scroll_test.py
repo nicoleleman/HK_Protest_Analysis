@@ -7,13 +7,16 @@ browser = webdriver.Chrome()
 
 # Tell Selenium to get the URL you're interested in.
 browser.get("https://www.scmp.com/topics/hong-kong-protests")
+#browser.get("https://www.bbc.co.uk/news")
+#browser.get("http://www.jabong.com/men/clothing/polos-tshirts/")
 
-# Selenium script to scroll to the bottom, wait 3 seconds for the next batch of data to load, then continue scrolling.  It will continue to do this until the page stops loading new data.
+#Selenium script to scroll to the bottom, wait 3 seconds for the next batch of data to load, then continue scrolling.
+# It will continue to do this until the page stops loading new data.
 lenOfPage = browser.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
 match=False
 while(match==False):
         lastCount = lenOfPage
-        time.sleep(5)
+        time.sleep(15)
         lenOfPage = browser.execute_script("window.scrollTo(0, document.body.scrollHeight);var lenOfPage=document.body.scrollHeight;return lenOfPage;")
 
         if lastCount==lenOfPage:
