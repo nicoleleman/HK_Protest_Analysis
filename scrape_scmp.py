@@ -7,24 +7,36 @@ source = requests.get(link).text
 soup = BeautifulSoup(source, 'html5lib')
 #print(soup.prettify())
 
+with open('scmp_article_content.csv', 'w', newline='') as f:
+    fieldnames = ['title', 'summary', 'date', 'main_text_title', 'paragraphs']
+    writer = csv.DictWriter(f, fieldnames=fieldnames)
+    writer.writeheader()
 
-for article in soup.find_all('div', class_='article__wrapper wrapper'):
-    title = article.h1.text
-    print(f'Title: {title}')
+    for article in soup.find_all('div', class_='article__wrapper wrapper'):
+        title = article.h1.text
+        print(f'Title: {title}')
 
-    for summaries in article.find_all('li', class_='print-article__summary--li content--li'):
-        print(f'Summary: {summaries.getText()}')
+        for summaries in article.find_all('li', class_='print-article__summary--li content--li'):
+            summary = summaries.getText()
+            print(f'Summary >>>> {summary}')
 
-    date_published = article.find('p', class_='last-update__published published')
-    date = date_published.time.text
-    print(date)
+        date_published = article.find('p', class_='last-update__published published')
+        date = date_published.time.getText()
+        print(f'Date Published >>>> {date[10:]}')
 
-    for main_text in article.find_all('div', class_='print-article__body article-details-type--p content--p'):
-        print(main_text)
+        for main_text in article.find_all('div', class_='print-article__body article-details-type--p content--p'):
+            main_text_title = main_text.getText()
+            print(f'Main Text Title >>>> {main_text_title}')
 
-    for main_text2 in article.find_all('p', class_='print-article__body article-details-type--p content--p'):
-        paragraphs = main_text2.text
-        print(paragraphs)
+        for main_text2 in article.find_all('p', class_='print-article__body article-details-type--p content--p'):
+            paragraphs = main_text2.getText()
+            print(f'Article Text >>>> {paragraphs}')
+
+        for item in article:
+            # unix timestamp included the millisecond so divide by 1000 is required
+            writer.writerow({'title': title, 'summary': summary,'date': date, 'main_text_title': main_text_title, 'paragraphs': paragraphs})
+        # except Exception as e:
+        #     writer.writerow({'title': '', 'summary': '', 'date': '', 'main_text_title': '', 'paragraphs': ''})
 
 
 
