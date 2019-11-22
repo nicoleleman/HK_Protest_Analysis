@@ -6,9 +6,8 @@ from datetime import datetime
 after = ''
 
 with open('scmp_articles.csv', 'w', newline='') as f:
-    fieldnames = ['socialHeadline', 'headline', 'urlAlias', 'updatedDate']
-    writer = csv.DictWriter(f, fieldnames=fieldnames)
-    writer.writeheader()
+    writer = csv.writer(f)
+    writer.writerow(['socialHeadline', 'headline', 'urlAlias', 'updatedDate'])
 
     # This for loop gets the site content using an api call
     for i in range(10):
@@ -30,7 +29,6 @@ with open('scmp_articles.csv', 'w', newline='') as f:
                 social_headline = '"' + item['socialHeadline'] + '"'
                 headline = '"' + item['headline'] + '"'
                 new_url = 'https://scmp.com/print' + str(item['urlAlias'])
-                writer.writerow({'socialHeadline':  social_headline, 'headline': headline,
-                                     'urlAlias': new_url, 'updatedDate': converted_date})
+                writer.writerows([social_headline, headline, new_url, converted_date])
         except Exception as e:
-            writer.writerow({'socialHeadline':  '', 'headline': '', 'urlAlias': '', 'updatedDate': ''})
+            writer.writerows(['', '', '', ''])
