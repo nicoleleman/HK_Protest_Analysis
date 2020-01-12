@@ -5,14 +5,14 @@ from datetime import datetime
 # The variable after stores the endCursor of the previous page
 after = ''
 
-with open('scmp_articles.csv', 'w', newline='') as f:
+with open('scmp_articles_2020.csv', 'w', newline='') as f:
     fieldnames = ['socialHeadline', 'headline', 'urlAlias', 'updatedDate']
     writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()
 
     # This for loop gets the site content using an api call
-    for i in range(10):
-        url = 'https://apigw.scmp.com/content-delivery/v1?operationName=gettopicbyentityuuid&variables={"latestContentsLimit":50,"latestOpinionsLimit":50,"entityUuid":"21363753-95b4-43cc-bf62-3fd61ff77877","articleTypeId":"012d7708-2959-4b2b-9031-23e3d025a08d","applicationIds":["2695b2c9-96ef-4fe4-96f8-ba20d0a020b3"],"after":"'+after+'"}&extensions={"persistedQuery":{"version":1,"sha256Hash":"e1586e5b5b2f1f63a3d84ec54864eab377d6291c88270911bbc2a76e26addab9"}}'
+    for i in range(150):
+        url = 'https://apigw.scmp.com/content-delivery/v1?operationName=gettopicbyentityuuid&variables={"latestContentsLimit":30,"latestOpinionsLimit":30,"entityUuid":"21363753-95b4-43cc-bf62-3fd61ff77877","articleTypeId":"012d7708-2959-4b2b-9031-23e3d025a08d","applicationIds":["2695b2c9-96ef-4fe4-96f8-ba20d0a020b3"],"after":"'+after+'"}&extensions={"persistedQuery":{"version":1,"sha256Hash":"7547e9bc2726675222d3633195ec7490e62b3ddfdae1bcaa564e2d1553fae2f6"}}'
 
         print('>>>>', i, after)
         headers = {'apikey': 'MyYvyg8M9RTaevVlcIRhN5yRIqqVssNY'}
