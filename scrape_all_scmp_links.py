@@ -5,7 +5,7 @@ from datetime import datetime
 # The variable after stores the endCursor of the previous page
 after = ''
 
-with open('scmp_articles_2020.csv', 'w', newline='') as f:
+with open('scmp_articles_2020_Feb.csv', 'w', newline='') as f:
     fieldnames = ['socialHeadline', 'headline', 'urlAlias', 'updatedDate']
     writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()

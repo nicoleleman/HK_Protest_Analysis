@@ -21,6 +21,7 @@ with open('scmp_article_content.csv', 'w', newline='') as f:
     fieldnames = ['title', 'summary', 'date', 'main_text_title', 'paragraphs']
     writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()
+    article_text_list = []
 
     for article in soup.find_all('div', class_='article__wrapper wrapper'):
         title = article.h1.text
@@ -40,14 +41,15 @@ with open('scmp_article_content.csv', 'w', newline='') as f:
 
         for main_text2 in article.find_all('p', class_='print-article__body article-details-type--p content--p'):
             paragraphs = main_text2.getText()
+            article_text_list.append(paragraphs)
+            article_text_conc = ' '.join(article_text_list)
             print(f'Article Text >>>> {paragraphs}')
 
         for item in article:
             # unix timestamp included the millisecond so divide by 1000 is required
-            writer.writerow({'title': title, 'summary': summary,'date': date, 'main_text_title': main_text_title, 'paragraphs': paragraphs})
+            writer.writerow({'title': title, 'summary': summary,'date': date, \
+                             'main_text_title': main_text_title, 'paragraphs': article_text_conc})
             #except Exception as e:
                 #writer.writerow({'title': '', 'summary': '', 'date': '', 'main_text_title': '', 'paragraphs': ''})
 
-
-
-
+print(article_text_conc)
