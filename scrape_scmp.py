@@ -3,53 +3,62 @@ import pandas as pd
 import requests
 import csv
 path = 'scmp_articles_2020_01_10.csv'
+list_of_url = []
 
-# with open (path, 'r') as f:
-#     reader = csv.reader(f)
-#     list_of_url = []
-#     for row in reader:
-#         list_of_url.append(row[2])
-#         print(row[2])
+# Open the CSV file scmp_articles and import all  article URLs into a list
+with open (path, 'r') as url_file:
+    reader = csv.reader(url_file)
+    next(reader, None)
+    for row in reader:
+        list_of_url.append(row[2])
 
+# link = 'https://www.scmp.com/print/news/hong-kong/politics/article/3014737/nearly-2-million-people-take-streets-forcing-public-apology'
+# source = requests.get(link).text
+# soup = BeautifulSoup(source, 'html5lib')
+# print(soup.prettify())
 
-link = 'https://www.scmp.com/print/news/hong-kong/politics/article/3014737/nearly-2-million-people-take-streets-forcing-public-apology'
-source = requests.get(link).text
-soup = BeautifulSoup(source, 'html5lib')
-print(soup.prettify())
-
-with open('scmp_article_content.csv', 'w', newline='') as f:
+with open('scmp_article_content_test.csv', 'w', newline='', encoding='utf-8-sig') as f:
     fieldnames = ['title', 'summary', 'date', 'main_text_title', 'paragraphs']
     writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()
-    article_text_list = []
 
-    for article in soup.find_all('div', class_='article__wrapper wrapper'):
-        title = article.h1.text
-        print(f'Title: {title}')
 
-        for summaries in article.find_all('li', class_='print-article__summary--li content--li'):
-            summary = summaries.getText()
-            print(f'Summary >>>> {summary}')
+    # Loop over the list of URLs
+    for url in list_of_url[1:2]:
+        source = requests.get(url).text
+        soup = BeautifulSoup(source, 'html5lib')
+        article_text_list = []
+        article_main_text = []
+        article_summary = []
 
-        date_published = article.find('p', class_='last-update__published published')
-        date = date_published.time.getText()
-        print(f'Date Published >>>> {date[10:]}')
+        for article in soup.find_all('div', class_='article__wrapper wrapper'):
+            title = article.h1.text
+            print(f'Title: {title}')
 
-        for main_text in article.find_all('div', class_='print-article__body article-details-type--p content--p'):
-            main_text_title = main_text.getText()
-            print(f'Main Text Title >>>> {main_text_title}')
+            date_published = article.find('p', class_='last-update__published published')
+            date = date_published.time.getText()
+            print(f'Date Published >>>> {date[10:]}')
 
-        for main_text2 in article.find_all('p', class_='print-article__body article-details-type--p content--p'):
-            paragraphs = main_text2.getText()
-            article_text_list.append(paragraphs)
-            article_text_conc = ' '.join(article_text_list)
-            print(f'Article Text >>>> {paragraphs}')
+            for summaries in article.find_all('li', class_='print-article__summary--li content--li'):
+                article_summary.append(summaries.getText())
+                article_summary_conc = '; '.join(article_summary)
+                print(f'Summary >>>> {article_summary_conc}')
 
-        for item in article:
-            # unix timestamp included the millisecond so divide by 1000 is required
-            writer.writerow({'title': title, 'summary': summary,'date': date, \
-                             'main_text_title': main_text_title, 'paragraphs': article_text_conc})
-            #except Exception as e:
-                #writer.writerow({'title': '', 'summary': '', 'date': '', 'main_text_title': '', 'paragraphs': ''})
+            for main_text in article.find_all('div', class_='print-article__body article-details-type--p content--p'):
+                article_main_text.append(main_text.getText())
+                article_main_text_conc = '; '.join(article_main_text)
+                print(f'Main Text Title >>>> {article_main_text_conc}')
 
-print(article_text_conc)
+            for main_text2 in article.find_all('p', class_='print-article__body article-details-type--p content--p'):
+                paragraphs = main_text2.getText()
+                article_text_list.append(paragraphs)
+                article_text_conc = ' '.join(article_text_list)
+                print(f'Article Text >>>> {article_text_conc}')
+
+            for item in article:
+                try:
+                # unix timestamp included the millisecond so divide by 1000 is required
+                    writer.writerow({'title': title, 'summary': article_summary_conc,'date': date[11:], \
+                                 'main_text_title': article_main_text_conc, 'paragraphs': article_text_conc})
+                except Exception as e:
+                    writer.writerow({'title': '', 'summary': '', 'date': '', 'main_text_title': '', 'paragraphs': ''})
