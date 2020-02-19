@@ -5,26 +5,21 @@ import csv
 path = 'scmp_articles_2020_01_10.csv'
 list_of_url = []
 
-# Open the CSV file scmp_articles and import all  article URLs into a list
+# Open the CSV file scmp_articles and import all article URLs into a list
 with open (path, 'r') as url_file:
     reader = csv.reader(url_file)
     next(reader, None)
     for row in reader:
         list_of_url.append(row[2])
+#print(list_of_url[0:10])
 
-# link = 'https://www.scmp.com/print/news/hong-kong/politics/article/3014737/nearly-2-million-people-take-streets-forcing-public-apology'
-# source = requests.get(link).text
-# soup = BeautifulSoup(source, 'html5lib')
-# print(soup.prettify())
-
-with open('scmp_article_content_test.csv', 'w', newline='', encoding='utf-8-sig') as f:
+with open('scmp_article_content.csv', 'w', newline='', encoding='utf-8-sig') as f:
     fieldnames = ['title', 'summary', 'date', 'main_text_title', 'paragraphs']
     writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()
 
-
     # Loop over the list of URLs
-    for url in list_of_url[1:2]:
+    for url in list_of_url:
         source = requests.get(url).text
         soup = BeautifulSoup(source, 'html5lib')
         article_text_list = []
@@ -55,10 +50,9 @@ with open('scmp_article_content_test.csv', 'w', newline='', encoding='utf-8-sig'
                 article_text_conc = ' '.join(article_text_list)
                 print(f'Article Text >>>> {article_text_conc}')
 
-            for item in article:
-                try:
-                # unix timestamp included the millisecond so divide by 1000 is required
-                    writer.writerow({'title': title, 'summary': article_summary_conc,'date': date[11:], \
-                                 'main_text_title': article_main_text_conc, 'paragraphs': article_text_conc})
-                except Exception as e:
-                    writer.writerow({'title': '', 'summary': '', 'date': '', 'main_text_title': '', 'paragraphs': ''})
+            try:
+            # unix timestamp included the millisecond so divide by 1000 is required
+                writer.writerow({'title': title, 'summary': article_summary_conc,'date': date[11:], \
+                             'main_text_title': article_main_text_conc, 'paragraphs': article_text_conc})
+            except Exception as e:
+                writer.writerow({'title': '', 'summary': '', 'date': '', 'main_text_title': '', 'paragraphs': ''})
