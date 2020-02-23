@@ -13,13 +13,13 @@ with open (path, 'r') as url_file:
         list_of_url.append(row[2])
 #print(list_of_url[0:10])
 
-with open('scmp_article_content.csv', 'w', newline='', encoding='utf-8-sig') as f:
-    fieldnames = ['title', 'summary', 'date', 'main_text_title', 'paragraphs']
+with open('scmp_article_content_part25new.csv', 'w', newline='', encoding='utf-8-sig') as f:
+    fieldnames = ['title', 'summary', 'date', 'main_text_title', 'paragraphs','url']
     writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()
 
     # Loop over the list of URLs
-    for url in list_of_url:
+    for url in list_of_url[1527:2001]:
         source = requests.get(url).text
         soup = BeautifulSoup(source, 'html5lib')
         article_text_list = []
@@ -53,6 +53,6 @@ with open('scmp_article_content.csv', 'w', newline='', encoding='utf-8-sig') as 
             try:
             # unix timestamp included the millisecond so divide by 1000 is required
                 writer.writerow({'title': title, 'summary': article_summary_conc,'date': date[11:], \
-                             'main_text_title': article_main_text_conc, 'paragraphs': article_text_conc})
+                             'main_text_title': article_main_text_conc, 'paragraphs': article_text_conc, 'url': url})
             except Exception as e:
-                writer.writerow({'title': '', 'summary': '', 'date': '', 'main_text_title': '', 'paragraphs': ''})
+                writer.writerow({'title': '', 'summary': '', 'date': '', 'main_text_title': '', 'paragraphs': '', 'url': ''})
