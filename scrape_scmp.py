@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import requests
 import csv
-path = 'scmp_articles_2020_01_10.csv'
+path = 'scmp_articles_2020_02_23.csv'
 list_of_url = []
 
 # Open the CSV file scmp_articles and import all article URLs into a list
@@ -13,13 +13,13 @@ with open (path, 'r') as url_file:
         list_of_url.append(row[2])
 #print(list_of_url[0:10])
 
-with open('scmp_article_content_part25new.csv', 'w', newline='', encoding='utf-8-sig') as f:
+with open('scmp_article_content_part3.csv', 'w', newline='', encoding='utf-8-sig') as f:
     fieldnames = ['title', 'summary', 'date', 'main_text_title', 'paragraphs','url']
     writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()
 
     # Loop over the list of URLs
-    for url in list_of_url[1527:2001]:
+    for url in list_of_url[2001:3001]:
         source = requests.get(url).text
         soup = BeautifulSoup(source, 'html5lib')
         article_text_list = []
