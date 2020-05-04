@@ -11,7 +11,7 @@ from collections import Counter
 
 def count_frequent_words():
     global Counter
-    df = pd.read_csv('csv_files/scmp_article_content_all.csv')
+    df = pd.read_csv('../../csv_files/scmp_article_content_all.csv')
     text_dataset = df['paragraphs']
     #print(type(text_dataset.head()))
 

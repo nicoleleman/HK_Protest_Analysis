@@ -53,7 +53,7 @@ scrape_all_links(url)
 Function to scrape each individual article
 '''
 def scrape_articles(path):
-    file_path = 'csv_files/scmp_articles_2020_02_23.csv'
+    file_path = '../../csv_files/scmp_articles_2020_02_23.csv'
     list_of_url = []
     # Open the CSV file scmp_articles and import all article URLs into a list
     with open (path, 'r') as url_file:
